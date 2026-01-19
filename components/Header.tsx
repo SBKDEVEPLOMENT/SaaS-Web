@@ -13,7 +13,8 @@ export function Header() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!supabaseClient) {
+    const client = supabaseClient;
+    if (!client) {
       setLoading(false);
       return;
     }
@@ -21,11 +22,11 @@ export function Header() {
     const getUser = async () => {
       const {
         data: { session },
-      } = await supabaseClient.auth.getSession();
+      } = await client.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
 
-      const { data: authListener } = supabaseClient.auth.onAuthStateChange(
+      const { data: authListener } = client.auth.onAuthStateChange(
         (event, session) => {
           setUser(session?.user ?? null);
         }

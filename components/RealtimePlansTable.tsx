@@ -26,12 +26,13 @@ export function RealtimePlansTable() {
   const [ready, setReady] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!supabaseClient) {
+    const client = supabaseClient;
+    if (!client) {
       setReady(true);
       return;
     }
 
-    supabaseClient
+    client
       .from("hosting_plans")
       .select("*")
       .order("created_at", { ascending: false })
@@ -42,7 +43,7 @@ export function RealtimePlansTable() {
         setReady(true);
       });
 
-    const channel = supabaseClient
+    const channel = client
       .channel("hosting_plans_realtime")
       .on(
         "postgres_changes",
@@ -69,7 +70,7 @@ export function RealtimePlansTable() {
       .subscribe();
 
     return () => {
-      supabaseClient.removeChannel(channel);
+      client.removeChannel(channel);
     };
   }, []);
 

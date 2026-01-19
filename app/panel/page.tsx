@@ -32,7 +32,8 @@ export default function PanelPage() {
   const [revenueLoading, setRevenueLoading] = useState(true);
 
   useEffect(() => {
-    if (!supabaseClient) {
+    const client = supabaseClient;
+    if (!client) {
       setStatsError("Supabase no está configurado.");
       setStatsLoading(false);
       setRevenueLoading(false);
@@ -40,7 +41,7 @@ export default function PanelPage() {
     }
 
     const loadStats = async () => {
-      const { data, error } = await supabaseClient
+      const { data, error } = await client
         .from("dashboard_stats")
         .select("*")
         .single();
@@ -54,7 +55,7 @@ export default function PanelPage() {
     };
 
     const loadRevenue = async () => {
-      const { data, error } = await supabaseClient
+      const { data, error } = await client
         .from("dashboard_revenue_monthly")
         .select("month_label, revenue_eur, month_start")
         .order("month_start", { ascending: true });
