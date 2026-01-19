@@ -69,6 +69,7 @@ export async function POST(req: NextRequest) {
 
     const text = response.text || "Lo siento, no pude generar una respuesta.";
 
+    // Return the response as JSON
     return NextResponse.json({
       answer: text
     });
