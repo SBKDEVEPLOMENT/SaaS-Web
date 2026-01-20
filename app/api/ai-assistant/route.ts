@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+// Vercel Build Fix v4 - Corrected Type Error
 import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.GEMINI_API_KEY;
