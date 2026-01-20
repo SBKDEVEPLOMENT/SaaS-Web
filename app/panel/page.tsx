@@ -74,6 +74,27 @@ export default function PanelPage() {
 
     loadStats();
     loadRevenue();
+
+    // Suscripción a cambios en tiempo real para actualizar contadores y gráficas
+    const channel = client
+      .channel("dashboard_realtime_stats")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "hosting_plans"
+        },
+        () => {
+          loadStats();
+          loadRevenue();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      client.removeChannel(channel);
+    };
   }, []);
 
   return (
