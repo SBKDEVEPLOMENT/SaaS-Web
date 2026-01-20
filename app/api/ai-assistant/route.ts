@@ -24,6 +24,9 @@ export async function POST(req: NextRequest) {
     apiKey
   });
 
+  // Force API version via client config if possible or needed by SDK
+  // but @google/genai usually handles it.
+  
   const body = (await req.json()) as {
     messages?: ChatMessage[];
   };
@@ -46,7 +49,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       contents: [
         {
           role: "user",
@@ -76,13 +79,27 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Error en el asistente de Fylo:", error);
+    
+    // Attempt to list available models for debugging
+    let availableModels = "No se pudieron listar los modelos.";
+    try {
+      const modelsResponse = await ai.models.list();
+      // The new SDK returns a paginated list or similar, let's try to map it safely
+      // Inspecting the type of modelsResponse might be needed, but let's assume it's iterable or has 'models'
+      // For now, just stringify it to see what we get if possible, or skip if complex
+       availableModels = JSON.stringify(modelsResponse).slice(0, 200); 
+    } catch (listError) {
+       availableModels = "Error al listar modelos: " + String(listError);
+    }
+
     const message =
       error instanceof Error ? error.message : String(error);
     return NextResponse.json(
       {
         error:
-          "No se pudo obtener respuesta de la IA en este momento. Detalle técnico: " +
-          message
+          "No se pudo obtener respuesta de la IA. Error: " +
+          message + 
+          " | Modelos disponibles (debug): " + availableModels
       },
       { status: 500 }
     );

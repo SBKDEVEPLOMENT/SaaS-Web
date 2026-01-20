@@ -11,12 +11,11 @@ export default function HomePage() {
         </div>
         <div className="space-y-4">
           <h1 className="text-balance text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-            VPS cloud verdes, rápidas y listas para cualquier proyecto.
+            VPS rápidas y listas para cualquier proyecto.
           </h1>
           <p className="max-w-xl text-sm text-slate-600 sm:text-base">
             Elige ubicación, sistema operativo y recursos y deja que Fylo se encargue
-            del resto. Diseñado para proyectos web, APIs, SaaS y e-commerce que
-            necesitan un panel de compra limpio, profesional y listo para producción.
+            del resto. Diseñado para proyectos web, profesionales y listos para producción.
           </p>
         </div>
         <dl
