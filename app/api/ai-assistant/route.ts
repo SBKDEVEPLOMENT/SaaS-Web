@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-// Vercel Build Fix v4 - Corrected Type Error
+// Vercel Build Fix v5 - Force Gemini 1.5 Flash Update
 import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.GEMINI_API_KEY;
