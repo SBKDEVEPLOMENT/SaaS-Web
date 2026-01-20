@@ -44,11 +44,8 @@ export default function LoginPage() {
         metadata.is_admin === 1;
       const isAdmin = isAdminFlag || role === "admin";
 
-      if (isAdmin) {
-        router.push("/panel");
-      } else {
-        router.push("/");
-      }
+      // Redirigir siempre al panel, el layout del panel manejará qué mostrar según el rol
+      router.push("/panel");
     } catch (err: any) {
       setError(err.message || "Error al iniciar sesión");
     } finally {

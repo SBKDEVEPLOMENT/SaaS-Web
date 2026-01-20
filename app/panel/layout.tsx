@@ -19,6 +19,7 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isAdminUser, setIsAdminUser] = useState(false);
   const [configError, setConfigError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,12 +49,8 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
         metadata.is_admin === 1;
       const isAdmin = isAdminFlag || role === "admin";
 
-      if (!isAdmin) {
-        router.push("/auth/login");
-        return;
-      }
-
-      setUserEmail(session.user.email ?? "admin@fylo.com");
+      setIsAdminUser(isAdmin);
+      setUserEmail(session.user.email ?? "usuario@fylo.com");
       setLoading(false);
     };
 
@@ -100,7 +97,9 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-fylo-600 text-white font-bold">
               F
             </div>
-            <span className="text-lg font-bold tracking-tight">Fylo Admin</span>
+            <span className="text-lg font-bold tracking-tight">
+              {isAdminUser ? "Fylo Admin" : "Fylo Client"}
+            </span>
           </div>
         </div>
 
@@ -111,19 +110,23 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
           </Link>
           <Link href="/panel/servers" className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900">
             <FontAwesomeIcon icon={faServer} className="h-4 w-4 text-slate-400 group-hover:text-slate-600" />
-            Servidores VPS
+            {isAdminUser ? "Servidores VPS" : "Mis VPS"}
           </Link>
-          <Link href="/panel/users" className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-            <FontAwesomeIcon icon={faUsers} className="h-4 w-4 text-slate-400 group-hover:text-slate-600" />
-            Clientes
-          </Link>
+          
+          {isAdminUser && (
+            <Link href="/panel/users" className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+              <FontAwesomeIcon icon={faUsers} className="h-4 w-4 text-slate-400 group-hover:text-slate-600" />
+              Clientes
+            </Link>
+          )}
+
           <div className="pt-4">
             <p className="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
               Configuración
             </p>
             <Link href="/panel/settings" className="mt-2 group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900">
               <FontAwesomeIcon icon={faCog} className="h-4 w-4 text-slate-400 group-hover:text-slate-600" />
-              Ajustes del Sistema
+              {isAdminUser ? "Ajustes del Sistema" : "Mi Cuenta"}
             </Link>
           </div>
         </nav>
@@ -147,12 +150,14 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
             <button className="text-slate-500 hover:text-slate-700">
               <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
             </button>
-            <span className="font-semibold text-slate-900">Fylo Admin</span>
+            <span className="font-semibold text-slate-900">
+              {isAdminUser ? "Fylo Admin" : "Fylo Client"}
+            </span>
           </div>
           
           <div className="hidden lg:block">
             <h2 className="text-sm font-medium text-slate-500">
-              Vista General
+              {isAdminUser ? "Vista General" : "Mi Panel"}
             </h2>
           </div>
 
@@ -160,7 +165,9 @@ export default function PanelLayout({ children }: { children: React.ReactNode })
             <div className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
               <div className="h-6 w-6 rounded-full bg-gradient-to-tr from-fylo-500 to-emerald-400" />
               <div className="text-xs">
-                <p className="font-medium text-slate-700">Admin Ejecutivo</p>
+                <p className="font-medium text-slate-700">
+                  {isAdminUser ? "Admin Ejecutivo" : "Cliente"}
+                </p>
                 <p className="text-[10px] text-slate-500">{userEmail}</p>
               </div>
             </div>
